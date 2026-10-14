@@ -1,19 +1,33 @@
 """Password strength checker."""
 
+from pathlib import Path
+
+COMMON_FILE = Path(__file__).parent / "common_passwords.txt"
+
+
 def character_classes(password):
     """Say which type of character the password contains."""
     return {
-       "lowercase letters": any(c.islower() for c in password),
+        "lowercase letters": any(c.islower() for c in password),
         "uppercase letters": any(c.isupper() for c in password),
         "digits": any(c.isdigit() for c in password),
-        "symbols": any(not c.isalnum() for c in password), 
+        "symbols": any(not c.isalnum() for c in password),
     }
 
 
-def check_password(password):
+def load_common_passwords(path=COMMON_FILE):
+    """Return the common passwords as a lowercase set."""
+    with open(path, encoding="utf-8") as f:
+        return {line.strip().lower() for line in f if line.strip()}
+
+
+def check_password(password, common=None):
     """Return (score, reasons). Score is 0 to 4."""
     if not password:
         return 0, ["empty password"]
+
+    if common is None:
+        common = load_common_passwords()
 
     score = 0
     reasons = []
@@ -32,6 +46,12 @@ def check_password(password):
         if not present:
             reasons.append(f"no {name}")
     if sum(classes.values()) >= 3:
+        score += 1
+
+    if password.lower() in common:
+        reasons.append("found in common list")
+        score = 0
+    else:
         score += 1
 
     return score, reasons
