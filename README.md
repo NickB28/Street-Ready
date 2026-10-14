@@ -5,7 +5,7 @@ Hello, I am Nick Britto. I am learning how to code by building a real project ev
 
 | Week | Topic | Link | Status |
 |------|-------|------|--------|
-| 01 | Git, Python, pytest: password strength checker | [week-01](week-01/) | In progress |
+| 01 | Git, Python, pytest: password strength checker | [week-01](week-01/) | Done |
 
 # How to run Week 01
 
