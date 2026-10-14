@@ -17,4 +17,4 @@ scratch on Windows: GitHub, Git, Python, VS Code and an SSH key. I learnt the ba
 I created the SSH key with a single command that sets no passphrase. I read the red error messages properly: they told me exactly what was wrong each time. For pytest I pasted the tests, saved the file and ran it again, and got 15 passed.
 
 # Resources and LLM prompts that helped
-I used Claude and asked it to explain each piece of code in one or two lines. I also used youtube to learn the basics of using GitHub and some referred forums which helped me a lot.
+I used Claude and asked it to explain each piece of code in one or two lines. I also used youtube to learn the basics of using GitHub, referred forums and the websites provided by you.
