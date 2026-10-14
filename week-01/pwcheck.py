@@ -1,5 +1,5 @@
 """Password strength checker."""
-
+import getpass
 from pathlib import Path
 
 COMMON_FILE = Path(__file__).parent / "common_passwords.txt"
@@ -55,3 +55,19 @@ def check_password(password, common=None):
         score += 1
 
     return score, reasons
+
+
+LABELS = ["very weak", "weak", "fair", "strong", "very strong"]
+
+
+def main():
+    """Ask for a password (hidden) and print the result."""
+    password = getpass.getpass("Enter password (hidden): ")
+    score, reasons = check_password(password)
+    print(f"Score: {score}/4 ({LABELS[score]})")
+    for reason in reasons:
+        print(f"  - {reason}")
+
+
+if __name__ == "__main__":
+    main()
