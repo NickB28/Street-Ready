@@ -14,7 +14,7 @@ Hello, I am Nick Britto. I am learning how to code by building a real project ev
 git clone git@github.com:NickB28/Street-Ready.git
 cd Street-Ready
 python -m venv .venv
-source .venv\Scripts\Activate
+.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 python week-01/pwcheck.py
 pytest
