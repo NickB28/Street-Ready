@@ -6,6 +6,7 @@ Hello, I am Nick Britto. I am learning how to code by building a real project ev
 | Week | Topic | Link | Status |
 |------|-------|------|--------|
 | 01 | Git, Python, pytest: password strength checker | [week-01](week-01/) | Done |
+| 02 | Bash: file tidy and backup tool | [week-02](week-02/) | In progress |
 
 # How to run Week 01
 
@@ -13,7 +14,7 @@ Hello, I am Nick Britto. I am learning how to code by building a real project ev
 git clone git@github.com:NickB28/Street-Ready.git
 cd Street-Ready
 python -m venv .venv
-.venv\Scripts\Activate.ps1
+source .venv\Scripts\Activate
 pip install -r requirements.txt
 python week-01/pwcheck.py
 pytest
