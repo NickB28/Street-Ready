@@ -1,5 +1,6 @@
 # Street-Ready
 Software for my portfolio
+
 Hello, I am Nick Britto. I am learning how to code by building a real project every week for 12 months.
 
 My goal is to build software that helps me create a strong portfolio.
