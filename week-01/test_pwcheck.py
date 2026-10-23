@@ -1,6 +1,6 @@
 import pytest
 
-from pwcheck import check_password, load_common_passwords
+from pwcheck import check_password, has_repeated_run, load_common_passwords
 
 COMMON = {"password", "123456", "qwerty"}
 
@@ -65,3 +65,19 @@ def test_real_common_list_loads():
     common = load_common_passwords()
     assert len(common) >= 100
     assert "123456" in common
+
+def test_repeated_characters_are_capped():
+    score, reasons = check_password("zzzzzzzzzzzz", COMMON)
+    assert score <= 2
+    assert "repeated characters (like aaaa)" in reasons
+
+
+def test_repeated_run_with_symbol_is_capped():
+    score, _ = check_password("aaaaaaaaaaaaaaa!", COMMON)
+    assert score <= 2
+
+
+def test_has_repeated_run_detects_runs():
+    assert has_repeated_run("abbbbc")
+    assert not has_repeated_run("abababab")
+    assert not has_repeated_run("")

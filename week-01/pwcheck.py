@@ -1,7 +1,7 @@
 """Password strength checker."""
 import getpass
+import string
 from pathlib import Path
-
 COMMON_FILE = Path(__file__).parent / "common_passwords.txt"
 
 
@@ -14,6 +14,18 @@ def character_classes(password):
         "symbols": any(not c.isalnum() for c in password),
     }
 
+
+def has_repeated_run(password, run_length=4):
+    """True if any character appears run_length times in a row."""
+    count = 1
+    for previous, current in zip(password, password[1:]):
+        if current == previous:
+            count += 1
+            if count >= run_length:
+                return True
+        else:
+            count = 1
+    return False
 
 def load_common_passwords(path=COMMON_FILE):
     """Return the common passwords as a lowercase set."""
@@ -54,6 +66,10 @@ def check_password(password, common=None):
     else:
         score += 1
 
+    if has_repeated_run(password):
+        reasons.append("repeated characters (like aaaa)")
+        score = min(score, 2)
+        
     return score, reasons
 
 
