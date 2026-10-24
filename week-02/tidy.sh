@@ -25,6 +25,19 @@ category_for() {
     esac
 }
 
+month_for() {
+    local file="$1"
+    local name
+    name="$(basename "$file")"
+    if [[ "$name" =~ (20[0-9]{2})-(0[1-9]|1[0-2]) ]]; then
+        echo "${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+    elif [[ "$name" =~ (20[0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01]) ]]; then
+        echo "${BASH_REMATCH[1]}-${BASH_REMATCH[2]}"
+    else
+        date -d "@$(stat -c %Y "$file")" +%Y-%m
+    fi
+}
+
 dry_run=0
 positional=()
 
@@ -56,5 +69,5 @@ echo "dry_run=$dry_run source=$source_dir dest=$dest_dir"
 
 while IFS= read -r -d '' file; do
     name="$(basename "$file")"
-    printf '%s -> %s\n' "$name" "$(category_for "$name")"
+    printf '%s -> %s/%s\n' "$name" "$(category_for "$name")" "$(month_for "$file")"
 done < <(find "$source_dir" -type f -print0)
