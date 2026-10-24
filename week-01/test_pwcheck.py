@@ -81,3 +81,13 @@ def test_has_repeated_run_detects_runs():
     assert has_repeated_run("abbbbc")
     assert not has_repeated_run("abababab")
     assert not has_repeated_run("")
+
+def test_common_word_with_digits_and_symbols_is_capped():
+    score, reasons = check_password("Password1!", COMMON)
+    assert score <= 2
+    assert "common word with digits/symbols added" in reasons
+
+
+def test_summer2024_is_capped_with_real_list():
+    score, _ = check_password("Summer2024!!")
+    assert score <= 2

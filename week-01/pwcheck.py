@@ -60,16 +60,20 @@ def check_password(password, common=None):
     if sum(classes.values()) >= 3:
         score += 1
 
+    core = password.lower().strip(string.digits + string.punctuation)
     if password.lower() in common:
         reasons.append("found in common list")
         score = 0
+    elif core in common:
+        reasons.append("common word with digits/symbols added")
+        score = min(score, 1)
     else:
         score += 1
 
     if has_repeated_run(password):
         reasons.append("repeated characters (like aaaa)")
         score = min(score, 2)
-        
+
     return score, reasons
 
 
