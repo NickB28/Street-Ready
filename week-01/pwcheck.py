@@ -3,7 +3,7 @@ import getpass
 import string
 from pathlib import Path
 COMMON_FILE = Path(__file__).parent / "common_passwords.txt"
-
+SEQUENCES = ["abcdefghijklmnopqrstuvwxyz", "0123456789", "qwertyuiop", "asdfghjkl", "zxcvbnm"]
 
 def character_classes(password):
     """Say which type of character the password contains."""
@@ -26,6 +26,17 @@ def has_repeated_run(password, run_length=4):
         else:
             count = 1
     return False
+
+def has_sequence(password, length=4):
+    """True if the password contains a run of `length` letters or digits in order."""
+    lowered = password.lower()
+    for sequence in SEQUENCES:
+        for chunk in (sequence, sequence[::-1]):
+            for start in range(len(chunk) - length + 1):
+                if chunk[start:start + length] in lowered:
+                    return True
+    return False
+
 
 def load_common_passwords(path=COMMON_FILE):
     """Return the common passwords as a lowercase set."""
@@ -70,10 +81,15 @@ def check_password(password, common=None):
     else:
         score += 1
 
+    
     if has_repeated_run(password):
         reasons.append("repeated characters (like aaaa)")
         score = min(score, 2)
 
+    if has_sequence(password):
+        reasons.append("keyboard or alphabet sequence (like qwer or 1234)")
+        score = min(score, 2)
+        
     return score, reasons
 
 

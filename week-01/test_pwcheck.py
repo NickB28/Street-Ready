@@ -1,6 +1,6 @@
 import pytest
 
-from pwcheck import check_password, has_repeated_run, load_common_passwords
+from pwcheck import check_password, has_repeated_run, has_sequence, load_common_passwords, main
 
 COMMON = {"password", "123456", "qwerty"}
 
@@ -91,3 +91,39 @@ def test_common_word_with_digits_and_symbols_is_capped():
 def test_summer2024_is_capped_with_real_list():
     score, _ = check_password("Summer2024!!")
     assert score <= 2
+
+def test_keyboard_sequence_is_capped():
+    score, reasons = check_password("Qwerty!Xk92mPz", COMMON)
+    assert score <= 2
+    assert "keyboard or alphabet sequence (like qwer or 1234)" in reasons
+
+
+def test_number_sequence_is_capped():
+    score, _ = check_password("Zx!81234Kp#Lm", COMMON)
+    assert score <= 2
+
+
+def test_has_sequence_detects_sequences():
+    assert has_sequence("xx1234xx")
+    assert has_sequence("9876")
+    assert has_sequence("ABCD")
+    assert not has_sequence("a1b2c3d4")
+    assert not has_sequence("")
+
+
+def test_qwerty123456_is_capped_with_real_list():
+    score, _ = check_password("qwerty123456")
+    assert score <= 2
+
+def test_main_prints_score_and_reasons(monkeypatch, capsys):
+    monkeypatch.setattr("getpass.getpass", lambda prompt: "password")
+    main()
+    out = capsys.readouterr().out
+    assert "Score: 0/4" in out
+    assert "found in common list" in out
+
+
+def test_main_prints_perfect_score(monkeypatch, capsys):
+    monkeypatch.setattr("getpass.getpass", lambda prompt: "Tr0ub4dor&3xyz!")
+    main()
+    assert "Score: 4/4 (very strong)" in capsys.readouterr().out
