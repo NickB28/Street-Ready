@@ -9,6 +9,22 @@ Move files from SOURCE into DEST/<category>/<YYYY-MM>/.
 EOF
 }
 
+category_for() {
+    local name="$1"
+    local ext="${name##*.}"
+    if [ "$ext" = "$name" ]; then
+        echo "other"
+        return
+    fi
+    ext="${ext,,}"
+    case "$ext" in
+        pdf) echo "statements" ;;
+        jpg|jpeg|png|heic) echo "images" ;;
+        csv|xlsx|json) echo "data" ;;
+        *) echo "other" ;;
+    esac
+}
+
 dry_run=0
 positional=()
 
@@ -37,3 +53,8 @@ fi
 
 # Temporary line so shellcheck sees every variable used. We remove it later.
 echo "dry_run=$dry_run source=$source_dir dest=$dest_dir"
+
+while IFS= read -r -d '' file; do
+    name="$(basename "$file")"
+    printf '%s -> %s\n' "$name" "$(category_for "$name")"
+done < <(find "$source_dir" -type f -print0)
