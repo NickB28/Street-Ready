@@ -38,6 +38,27 @@ month_for() {
     fi
 }
 
+declare -A planned=()
+
+unique_dest() {
+    local dir="$1"
+    local name="$2"
+    local stem="$name"
+    local ext=""
+    local candidate
+    local n=0
+    if [[ "$name" == *.* ]]; then
+        stem="${name%.*}"
+        ext=".${name##*.}"
+    fi
+    candidate="$dir/$name"
+    while [ -e "$candidate" ] || [ -n "${planned[$candidate]:-}" ]; do
+        n=$((n + 1))
+        candidate="$dir/${stem}_${n}${ext}"
+    done
+    echo "$candidate"
+}
+
 dry_run=0
 positional=()
 
@@ -64,10 +85,30 @@ if [ ! -d "$source_dir" ] || [ ! -r "$source_dir" ]; then
     exit 2
 fi
 
-# Temporary line so shellcheck sees every variable used. We remove it later.
-echo "dry_run=$dry_run source=$source_dir dest=$dest_dir"
+moved=0
+skipped=0
+errors=0
 
 while IFS= read -r -d '' file; do
     name="$(basename "$file")"
-    printf '%s -> %s/%s\n' "$name" "$(category_for "$name")" "$(month_for "$file")"
-done < <(find "$source_dir" -type f -print0)
+    if [[ "$name" == .* ]]; then
+        echo "SKIP hidden: $file"
+        skipped=$((skipped + 1))
+        continue
+    fi
+    target_dir="$dest_dir/$(category_for "$name")/$(month_for "$file")"
+    target="$(unique_dest "$target_dir" "$name")"
+    planned["$target"]=1
+    if [ "$dry_run" -eq 1 ]; then
+        echo "DRY-RUN move: $file -> $target"
+        moved=$((moved + 1))
+    elif mkdir -p "$target_dir" && mv -n -- "$file" "$target"; then
+        echo "moved: $file -> $target"
+        moved=$((moved + 1))
+    else
+        echo "tidy.sh: failed to move: $file" >&2
+        errors=$((errors + 1))
+    fi
+done < <(find "$source_dir" -type f -print0 | sort -z)
+
+echo "moved=$moved skipped=$skipped errors=$errors"
