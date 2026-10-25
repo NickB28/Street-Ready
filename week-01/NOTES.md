@@ -18,3 +18,17 @@ I created the SSH key with a single command that sets no passphrase. I read the 
 
 # Resources and LLM prompts that helped
 I used Claude and asked it to explain each piece of code in one or two lines. I also used youtube to learn the basics of using GitHub, referred forums and the websites provided by you.
+
+# Required fix after review (pattern detection)
+
+Cletus's review found that weak passwords scored too high, so I added three checks to `pwcheck.py`:
+
+- repeated characters (for example `zzzzzzzzzzzz`) lower the score,
+- keyboard and number sequences (for example `qwerty` or `123456`) lower the score,
+- a common word with digits or symbols around it (for example `Password1!` or `Summer2024!!`) lowers the score.
+
+`zzzzzzzzzzzz`, `Password1!`, `Summer2024!!` and `qwerty123456` now each score 2 or less. I added tests that prove each one, plus a test that drives `main()` so the command-line entry point is covered. There are 26 tests and all pass.
+
+Also fixed from the same review: the README now uses the HTTPS clone URL with PowerShell and macOS/Linux commands, and `pytest` is pinned in `requirements.txt`.
+
+LLM use: Claude helped write the pattern checks and the new tests in small pieces. I pasted each piece, ran the tests, and committed once they passed. I am going through the code line by line so I can explain every part and why each test would fail if the code broke.
