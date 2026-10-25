@@ -25,6 +25,7 @@ fi
 
 dest_dir="$1"
 backup_dir="$2"
+keep=5
 
 if [ ! -d "$dest_dir" ] || [ ! -r "$dest_dir" ]; then
     echo "backup.sh: DEST missing or unreadable: $dest_dir" >&2
@@ -45,6 +46,26 @@ if ! tar -czf "$archive" -C "$dest_dir" .; then
     log ERROR create "archive=\"$archive\""
     exit 3
 fi
-
 log INFO create "archive=\"$archive\""
+
+if ! tar -tzf "$archive" > /dev/null; then
+    echo "backup.sh: verification failed: $archive" >&2
+    log ERROR verify "archive=\"$archive\" removed=yes"
+    rm -f -- "$archive"
+    exit 4
+fi
+
+hash="$(sha256sum "$archive" | cut -d ' ' -f 1)"
+log INFO verify "archive=\"$archive\" sha256=$hash"
 echo "created: $archive"
+echo "sha256: $hash"
+
+mapfile -d '' -t backups < <(find "$backup_dir" -maxdepth 1 -type f -name 'tidy-backup-*.tar.gz' -print0 | sort -z)
+excess=$((${#backups[@]} - keep))
+if [ "$excess" -gt 0 ]; then
+    for old in "${backups[@]:0:excess}"; do
+        rm -- "$old"
+        log INFO delete "archive=\"$old\""
+        echo "deleted: $old"
+    done
+fi
