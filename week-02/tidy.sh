@@ -6,6 +6,7 @@ usage() {
 Usage: tidy.sh [--dry-run] [-h|--help] SOURCE DEST
 
 Move files from SOURCE into DEST/<category>/<YYYY-MM>/.
+Writes a log to DEST/logs/tidy-YYYYMMDD.log.
 EOF
 }
 
@@ -59,6 +60,17 @@ unique_dest() {
     echo "$candidate"
 }
 
+log() {
+    local level="$1"
+    local action="$2"
+    local details="$3"
+    local tag=""
+    if [ "$dry_run" -eq 1 ]; then
+        tag=" [DRY-RUN]"
+    fi
+    printf '%s %s%s %s %s\n' "$(date -Iseconds)" "$level" "$tag" "$action" "$details" >> "$log_file"
+}
+
 dry_run=0
 positional=()
 
@@ -85,6 +97,12 @@ if [ ! -d "$source_dir" ] || [ ! -r "$source_dir" ]; then
     exit 2
 fi
 
+if ! mkdir -p "$dest_dir/logs"; then
+    echo "tidy.sh: cannot create log folder in: $dest_dir" >&2
+    exit 2
+fi
+log_file="$dest_dir/logs/tidy-$(date +%Y%m%d).log"
+
 moved=0
 skipped=0
 errors=0
@@ -93,6 +111,7 @@ while IFS= read -r -d '' file; do
     name="$(basename "$file")"
     if [[ "$name" == .* ]]; then
         echo "SKIP hidden: $file"
+        log WARN skip "src=\"$file\" reason=hidden"
         skipped=$((skipped + 1))
         continue
     fi
@@ -101,14 +120,18 @@ while IFS= read -r -d '' file; do
     planned["$target"]=1
     if [ "$dry_run" -eq 1 ]; then
         echo "DRY-RUN move: $file -> $target"
+        log INFO move "src=\"$file\" dst=\"$target\""
         moved=$((moved + 1))
     elif mkdir -p "$target_dir" && mv -n -- "$file" "$target"; then
         echo "moved: $file -> $target"
+        log INFO move "src=\"$file\" dst=\"$target\""
         moved=$((moved + 1))
     else
         echo "tidy.sh: failed to move: $file" >&2
+        log ERROR move "src=\"$file\" dst=\"$target\""
         errors=$((errors + 1))
     fi
 done < <(find "$source_dir" -type f -print0 | sort -z)
-
-echo "moved=$moved skipped=$skipped errors=$errors"
+summary="moved=$moved skipped=$skipped errors=$errors"
+log INFO summary "$summary"
+echo "$summary"
