@@ -12,7 +12,7 @@ My goal is to build software that helps me create a strong portfolio.
 |------|-------|------|--------|
 | 01 | Git, Python, pytest: password strength checker | [week-01](week-01/) | Done |
 | 02 | Bash: file tidy and backup tool | [week-02](week-02/) | Done |
-| 03 | Python: sgdfx CLI for MAS SGD/USD rates, with CI | - | In progress |
+| 03 | Python: sgdfx CLI for MAS SGD/USD rates, with CI | [week-03](week-03/) | Done |
 
 ## How to run Week 01
 
@@ -43,3 +43,4 @@ pytest
 ## How to run Week 02
 
 See [week-02/README.md](week-02/README.md) for install steps, commands and tests.
+
