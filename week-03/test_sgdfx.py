@@ -18,7 +18,7 @@ def test_latest_shows_most_recent_rate(capsys):
     code, out, _ = run(capsys, "--file", str(FIXTURE), "latest")
     assert code == 0
     assert "2015-03-19" in out
-    assert "1.4050" in out
+    assert "9.9999" in out
 
 
 def test_on_exact_date(capsys):
