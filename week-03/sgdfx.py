@@ -3,6 +3,7 @@
 import argparse
 import bisect
 import csv
+import sys
 from datetime import datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from pathlib import Path
@@ -102,3 +103,115 @@ def convert(amount, currency, rate):
         return result.quantize(TWO_PLACES, rounding=ROUND_HALF_UP)
     except ArithmeticError:
         raise DataError("amount is too large to convert") from None
+
+
+def lookup(rates, day):
+    """Find the rate for day and say so if an earlier date had to be used."""
+    found_day, rate = rate_on(rates, day)
+    if found_day != day:
+        print(f"No rate for {day} (weekend or holiday); using {found_day}.")
+    return found_day, rate
+
+
+def cmd_latest(args, rates):
+    day, rate = rates[-1]
+    print(f"{day}  {rate} SGD per USD")
+
+
+def cmd_on(args, rates):
+    day, rate = lookup(rates, args.date)
+    print(f"{day}  {rate} SGD per USD")
+
+
+def cmd_convert(args, rates):
+    if args.amount < 0:
+        raise DataError("amount must not be negative")
+    day, rate = lookup(rates, args.date) if args.date else rates[-1]
+    result = convert(args.amount, args.currency, rate)
+    other = "SGD" if args.currency == "USD" else "USD"
+    print(
+        f"{args.amount} {args.currency} = {result} {other}"
+        f"  (rate {rate} on {day})"
+    )
+
+
+def cmd_stats(args, rates):
+    result = stats_between(rates, args.start, args.end)
+    mean = result["mean"].quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP)
+    print(f"Rates from {args.start} to {args.end}")
+    print(f"min   {result['min']}")
+    print(f"max   {result['max']}")
+    print(f"mean  {mean}")
+    if result["move"] is None:
+        print("biggest move  n/a (only one rate in this range)")
+    else:
+        print(f"biggest move  {result['move']} on {result['move_date']}")
+
+
+COMMANDS = {
+    "latest": cmd_latest,
+    "on": cmd_on,
+    "convert": cmd_convert,
+    "stats": cmd_stats,
+}
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(
+        prog="sgdfx",
+        description="Look up and convert the MAS daily SGD per USD rate.",
+    )
+    parser.add_argument(
+        "--file",
+        type=Path,
+        default=DEFAULT_FILE,
+        help="CSV file to read (default: the MAS dataset in week-03/data)",
+    )
+    sub = parser.add_subparsers(dest="command", required=True)
+
+    sub.add_parser("latest", help="show the most recent rate")
+
+    on = sub.add_parser("on", help="show the rate on a date")
+    on.add_argument("date", type=parse_date, help="YYYY-MM-DD")
+
+    conv = sub.add_parser("convert", help="convert an amount")
+    conv.add_argument("amount", type=parse_amount)
+    conv.add_argument(
+        "--from",
+        dest="currency",
+        required=True,
+        type=str.upper,
+        choices=["USD", "SGD"],
+        help="the currency you have",
+    )
+    conv.add_argument(
+        "--date", type=parse_date, help="use this date's rate (default: latest)"
+    )
+
+    stats = sub.add_parser("stats", help="min, max, mean and biggest move")
+    stats.add_argument("--start", type=parse_date, required=True)
+    stats.add_argument("--end", type=parse_date, required=True)
+    return parser
+
+
+def main(argv=None):
+    try:
+        args = build_parser().parse_args(argv)
+    except SystemExit as stop:
+        return stop.code
+    try:
+        rates, skipped = load_rates(args.file)
+        if skipped:
+            print(
+                f"sgdfx: skipped {skipped} malformed rows in {args.file}",
+                file=sys.stderr,
+            )
+        COMMANDS[args.command](args, rates)
+    except DataError as err:
+        print(f"sgdfx: error: {err}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
