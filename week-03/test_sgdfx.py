@@ -3,7 +3,6 @@ from decimal import Decimal
 from pathlib import Path
 
 import pytest
-
 import sgdfx
 
 FIXTURE = Path(__file__).parent / "fixtures" / "rates_fixture.csv"

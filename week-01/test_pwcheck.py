@@ -1,5 +1,4 @@
 import pytest
-
 from pwcheck import check_password, has_repeated_run, has_sequence, load_common_passwords, main
 
 COMMON = {"password", "123456", "qwerty"}

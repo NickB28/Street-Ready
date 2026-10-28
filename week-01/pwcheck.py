@@ -2,6 +2,7 @@
 import getpass
 import string
 from pathlib import Path
+
 COMMON_FILE = Path(__file__).parent / "common_passwords.txt"
 SEQUENCES = ["abcdefghijklmnopqrstuvwxyz", "0123456789", "qwertyuiop", "asdfghjkl", "zxcvbnm"]
 
