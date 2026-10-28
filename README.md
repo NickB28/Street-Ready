@@ -1,4 +1,5 @@
 # Street-Ready
+![CI](https://github.com/NickB28/Street-Ready/actions/workflows/ci.yml/badge.svg)
 Software for my portfolio
 
 Hello, I am Nick Britto. I am learning how to code by building a real project every week for 12 months.
