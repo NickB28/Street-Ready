@@ -37,3 +37,8 @@
 ## LLM use (R6)
 
 Claude wrote `sgdfx.py`, the tests, the workflow file and the READMEs in small pieces during a chat. I pasted each piece, ran it, compared the output to what was expected, and committed once it worked. I broke a test and the code on purpose to see the tests and CI fail. I am going through every file line by line so I can explain it.
+
+## Next steps
+
+- Try the stretch goals: a Windows CI matrix and a --format json option.
+- Explain every line of the workflow file and every test out loud before submitting (R6).
