@@ -4,7 +4,7 @@ import argparse
 import bisect
 import csv
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from decimal import ROUND_HALF_UP, Decimal, InvalidOperation
 from pathlib import Path
 
@@ -67,6 +67,9 @@ def load_rates(path):
 
 def rate_on(rates, day):
     """Return (date, rate) for day, or the most recent earlier row."""
+    last_day = rates[-1][0]
+    if day > last_day:
+        raise DataError(f"no data after {last_day} (last available date is {last_day})")
     dates = [d for d, _ in rates]
     index = bisect.bisect_right(dates, day)
     if index == 0:
@@ -112,9 +115,18 @@ def lookup(rates, day):
         print(f"No rate for {day} (weekend or holiday); using {found_day}.")
     return found_day, rate
 
+def today():
+    """Return today's date. A separate function so tests can replace it."""
+    return date.today()
 
 def cmd_latest(args, rates):
     day, rate = rates[-1]
+    age = (today() - day).days
+    if age > 7:
+        print(
+            f"sgdfx: warning: the latest rate is {age} days old ({day})",
+            file=sys.stderr,
+        )
     print(f"{day}  {rate} SGD per USD")
 
 
