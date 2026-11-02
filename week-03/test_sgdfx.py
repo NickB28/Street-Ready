@@ -151,3 +151,34 @@ def test_convert_uses_decimal_not_float():
 def test_rate_on_returns_earlier_row():
     rates = [(date(2015, 3, 6), Decimal("1.38")), (date(2015, 3, 9), Decimal("1.39"))]
     assert sgdfx.rate_on(rates, date(2015, 3, 8)) == rates[0]
+
+def test_on_after_the_data_ends_is_a_data_error(capsys):
+    code, out, err = run(capsys, "--file", str(FIXTURE), "on", "2030-01-01")
+    assert code == 1
+    assert "2015-03-19" in err
+    assert "weekend" not in out
+    assert "Traceback" not in err
+
+
+def test_convert_after_the_data_ends_is_a_data_error(capsys):
+    code, out, err = run(
+        capsys, "--file", str(FIXTURE), "convert", "100", "--from", "USD",
+        "--date", "2030-01-01",
+    )
+    assert code == 1
+    assert "2015-03-19" in err
+    assert out == ""
+
+
+def test_latest_warns_when_the_rate_is_stale(capsys):
+    code, out, err = run(capsys, "--file", str(FIXTURE), "latest")
+    assert code == 0
+    assert "days old" in err
+    assert "1.4050" in out
+
+
+def test_latest_does_not_warn_when_the_rate_is_recent(capsys, monkeypatch):
+    monkeypatch.setattr(sgdfx, "today", lambda: date(2015, 3, 22))
+    code, out, err = run(capsys, "--file", str(FIXTURE), "latest")
+    assert code == 0
+    assert "days old" not in err
