@@ -60,3 +60,19 @@ What I did myself: typed every command, ran every test, checked the program's ou
 - `name: Lint with ruff` / `run: ruff check .`: checks the style of the whole repo. Any problem gives a non-zero exit code, so the run goes red.
 - `name: Type-check with mypy` / `run: mypy --strict week-04`: checks the type hints in week-04. This is the step that went red on run #19 when I added `x: int = "hello"`.
 - `name: Run tests` / `run: pytest`: runs every test in the repo, from week-01, week-03 and week-04.
+
+
+
+### Three tests and the code change that would make each one fail
+
+**1. `test_small_trade_pays_the_minimum_commission`** (`tests/test_domain.py`)
+It buys a small trade where 0.12% comes to less than S$10 and checks that the commission is exactly S$10.00.
+It would fail if, in `lotbook/fees.py`, I changed `MIN_COMMISSION = Decimal("10.00")` to `Decimal("5.00")`. A small trade would then be charged S$5.00 (or its own small percentage), not S$10.00.
+
+**2. `test_commission_rounds_half_up_to_the_cent`** (`tests/test_domain.py`)
+It uses a trade worth 8,337.50, where 0.12% is exactly 10.005, and checks that the commission is 10.01 (rounded half-up).
+It would fail if, in `lotbook/fees.py`, I changed `ROUND_HALF_UP` to `ROUND_HALF_EVEN` (and the import). Half-even rounds 10.005 to the nearest even cent, which is 10.00, so the test would get 10.00 instead of 10.01.
+
+**3. `test_partial_sell_books_the_hand_worked_profit`** (`tests/test_domain.py`)
+It runs my hand-worked D05 example (buy 300, buy 200, sell 400) and checks that the realised profit is 540.104.
+It would fail if, in `Portfolio._sell` in `lotbook/portfolio.py`, I changed `proceeds = value - commission` to `proceeds = value + commission`. A sell fee would then be added instead of deducted, giving proceeds of 14,817.76 and a profit of 575.624, not 540.104.
