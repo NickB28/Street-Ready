@@ -10,7 +10,7 @@ from pathlib import Path
 from lotbook.errors import LotbookError
 from lotbook.portfolio import Portfolio
 from lotbook.position import Position
-from lotbook.trade import Side, Trade
+from lotbook.trade import TICKER_PATTERN, Side, Trade
 
 CENT = Decimal("0.01")
 FOUR_PLACES = Decimal("0.0001")
@@ -69,18 +69,34 @@ def load_portfolio(path: Path) -> Portfolio:
     return portfolio
 
 
+def parse_price(row: dict[str, str], where: str) -> tuple[str, Decimal]:
+    """Turn one prices CSV row into (ticker, price), checking both."""
+    try:
+        ticker = row["ticker"].strip()
+        price = Decimal(row["price"])
+    except (KeyError, AttributeError, TypeError, InvalidOperation):
+        raise DataError(f"{where}: cannot read this row") from None
+    if not TICKER_PATTERN.fullmatch(ticker):
+        raise DataError(
+            f"{where}: invalid ticker {ticker!r} (2-4 capital letters or digits)"
+        )
+    if not price.is_finite() or price <= 0:
+        raise DataError(f"{where}: price must be greater than 0")
+    return ticker, price
+
+
 def read_prices(path: Path) -> dict[str, Decimal]:
-    """Read a prices CSV (ticker, price) into a dict of ticker to price."""
+    """Read a prices CSV (ticker, price) into a dict, rejecting bad or repeated tickers."""
     prices: dict[str, Decimal] = {}
+    first_row: dict[str, int] = {}
     for number, row in read_rows(path):
         where = f"{path.name} row {number}"
-        try:
-            ticker = row["ticker"].strip()
-            price = Decimal(row["price"])
-        except (KeyError, AttributeError, TypeError, InvalidOperation):
-            raise DataError(f"{where}: cannot read this row") from None
-        if not price.is_finite() or price <= 0:
-            raise DataError(f"{where}: price must be greater than 0")
+        ticker, price = parse_price(row, where)
+        if ticker in first_row:
+            raise DataError(
+                f"{where}: duplicate ticker {ticker} (already on row {first_row[ticker]})"
+            )
+        first_row[ticker] = number
         prices[ticker] = price
     return prices
 
