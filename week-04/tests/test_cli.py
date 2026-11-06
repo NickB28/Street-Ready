@@ -91,3 +91,30 @@ def test_file_saved_with_a_utf8_bom_is_accepted(
     code, out, err = run(capsys, "report", str(trades), "--prices", PRICES)
     assert code == 0
     assert "D05" in out
+
+def test_duplicate_price_ticker_exits_1_naming_both_rows(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path
+) -> None:
+    prices = tmp_path / "prices.csv"
+    prices.write_text("ticker,price\nD05,37.50\nO39,15.20\nD05,3.75\n")
+    code, out, err = run(capsys, "report", TRADES, "--prices", str(prices))
+    assert code == 1
+    assert "prices.csv row 4" in err
+    assert "duplicate ticker D05" in err
+    assert "already on row 2" in err
+    assert out == ""
+    assert "Traceback" not in err
+
+
+@pytest.mark.parametrize("ticker", ["d05", "D", "ABCDE", "D-5", ""])
+def test_invalid_price_ticker_exits_1_naming_the_row(
+    capsys: pytest.CaptureFixture[str], tmp_path: Path, ticker: str
+) -> None:
+    prices = tmp_path / "prices.csv"
+    prices.write_text(f"ticker,price\nD05,37.50\n{ticker},1.00\n")
+    code, out, err = run(capsys, "report", TRADES, "--prices", str(prices))
+    assert code == 1
+    assert "prices.csv row 3" in err
+    assert "invalid ticker" in err
+    assert out == ""
+    assert "Traceback" not in err
