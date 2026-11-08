@@ -69,7 +69,7 @@ def rate_on(rates, day):
     """Return (date, rate) for day, or the most recent earlier row."""
     last_day = rates[-1][0]
     if day > last_day:
-        raise DataError(f"no data after {last_day} (last available date is {last_day})")
+        raise DataError(f"no rate for {day}: the data ends on {last_day}")
     dates = [d for d, _ in rates]
     index = bisect.bisect_right(dates, day)
     if index == 0:
