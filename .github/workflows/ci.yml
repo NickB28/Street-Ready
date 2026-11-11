@@ -17,7 +17,9 @@ jobs:
         run: pip install -r requirements.txt
       - name: Lint with ruff
         run: ruff check .
-      - name: Type-check with mypy
+      - name: Type-check week-04 with mypy
         run: mypy --strict week-04
+      - name: Type-check week-05 with mypy
+        run: mypy --strict week-05
       - name: Run tests
         run: pytest
