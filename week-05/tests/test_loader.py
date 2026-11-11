@@ -16,7 +16,10 @@ def make_row(
     month: str = "2017-01", town: str = "ANG MO KIO", area: str = "44", price: str = "232000"
 ) -> str:
     """Build one full CSV row, changing only the fields a test cares about."""
-    return f"{month},{town},2 ROOM,406,ANG MO KIO AVE 10,10 TO 12,{area},Improved,1979,61 years,{price}"
+    return (
+        f"{month},{town},2 ROOM,406,ANG MO KIO AVE 10,10 TO 12,{area},"
+        f"Improved,1979,61 years,{price}"
+    )
 
 
 def write_csv(tmp_path: Path, *rows: str, encoding: str = "utf-8") -> Path:
