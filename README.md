@@ -14,6 +14,7 @@ My goal is to build software that helps me create a strong portfolio.
 | 02 | Bash: file tidy and backup tool | [week-02](week-02/) | Done |
 | 03 | Python: sgdfx CLI for MAS SGD/USD rates, with CI | [week-03](week-03/) | Done |
 | 04 | Python: lotbook typed SGX portfolio ledger, with mypy in CI | [week-04](week-04/) | Done |
+| 05 | Python: hdbsort, sorts and binary search with benchmarks | [week-05](week-05/) | Done |
 
 ## How to run Week 01
 
