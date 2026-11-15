@@ -44,3 +44,19 @@ def test_key_function_and_random_lists_match_bisect() -> None:
     pairs = [("a", 1), ("b", 2), ("c", 2), ("d", 4)]
     assert lower_bound(pairs, 2, key=lambda p: p[1]) == 1
     assert upper_bound(pairs, 2, key=lambda p: p[1]) == 3
+
+def test_key_calls_never_exceed_the_stated_maximum() -> None:
+    n = 244_243
+    items = list(range(n))
+    max_calls = 18  # floor(log2(n)) + 1, worked out in COMPLEXITY.md
+    for finder in (lower_bound, upper_bound):
+        for x in [-1, 0, 1, 12_345, n // 2, n - 1, n, n + 1]:
+            calls = 0
+
+            def counting_key(value: int) -> int:
+                nonlocal calls
+                calls += 1
+                return value
+
+            finder(items, x, key=counting_key)
+            assert calls <= max_calls

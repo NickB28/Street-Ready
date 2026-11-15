@@ -77,4 +77,11 @@ merge_sort and `sorted()` have the same Big-O (O(n log n)), so the gap is a cons
 
 ## Binary search on 244,000 rows
 
-- **Maximum comparisons:** each pass halves the range, so a search needs at most floor(log2(n)) + 1 passes. For n = 244,243: 2^17 =
+- **Maximum comparisons:** each pass halves the range, so a search needs at most floor(log2(n)) + 1 passes. For n = 244,243: 2^17 = 131,072 and 2^18 = 262,144, so log2(244,243) is between 17 and 18 and floor(log2(n)) = 17. The maximum is 17 + 1 = **18 comparisons**. Each pass makes exactly one comparison (one key call). A linear scan would need up to 244,243.
+
+- **Why it only works on sorted data:** each comparison throws away half the list, assuming everything on one side of `mid` is on the same side of the target. That is only true if the list is sorted. Example with the unsorted list `[5, 1, 4, 2, 6, 3]` and `lower_bound(items, 3)`:
+  - lo=0, hi=6, mid=3, value 2 < 3, so lo=4
+  - lo=4, hi=6, mid=5, value 3 is not < 3, so hi=5
+  - lo=4, hi=5, mid=4, value 6 is not < 3, so hi=4
+  - the loop stops and returns **4**
+  - But the first index with a value >= 3 is index 0 (the value 5), so the right answer is 0. The search skipped indexes 0 to 3 because it assumed the small values were all on the left.
