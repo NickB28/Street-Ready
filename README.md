@@ -15,6 +15,7 @@ My goal is to build software that helps me create a strong portfolio.
 | 03 | Python: sgdfx CLI for MAS SGD/USD rates, with CI | [week-03](week-03/) | Done |
 | 04 | Python: lotbook typed SGX portfolio ledger, with mypy in CI | [week-04](week-04/) | Done |
 | 05 | Python: hdbsort, sorts and binary search with benchmarks | [week-05](week-05/) | Done |
+| 06 | Python: sgxbook, order book from scratch data structures | [week-06](week-06/) | Done |
 
 ## How to run Week 01
 
