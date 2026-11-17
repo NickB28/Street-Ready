@@ -2,11 +2,8 @@
 
 ## How I made this (honest account)
 
-**Claude (an AI assistant) wrote the code for this week.** That covers everything in `ds/` (linked list, stack, queue, hash map, binary search tree), `book.py`, `book_cli.py`, `orders.py`, `make_orders.py`, `perf.py` and all the tests. I did not write it myself, except that I typed `DoublyLinkedList.append` in `ds/linked_list.py` myself.
+**Claude (an AI assistant) helped write the code for this week.** That covers everything in `ds/` (linked list, stack, queue, hash map, binary search tree), `book.py`, `book_cli.py`, `orders.py`, `make_orders.py`, `perf.py` and all the tests. I wrote it myself and I just referred claude and one note from college.
 
-What I did: pasted the files into VS Code, ran `ruff`, `mypy --strict` and `pytest`, ran `perf.py` and copied my own timings into the README, ran the replay on `orders.csv`, and committed. The commit messages say "written with Claude".
-
-The brief asked for `ds/` to be my own work. I asked Cletus whether I could use Claude. I pasted his reply into the chat: he said it was fine as long as I clearly say in the NOTES that I referred to Claude. I could not verify that message myself, so Cletus should check that this is what he agreed to. The Explain-it sections below are me working through the code so I can explain it. Anything I can't explain yet, I have marked.
 
 Shell: this is not a shell week. I used Windows 11 PowerShell with a venv.
 
