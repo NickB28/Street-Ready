@@ -1,6 +1,19 @@
 import random
+from typing import Any
 
+import ds.hash_map
+import handwritten.hash_map
+import pytest
 from ds.hash_map import HashMap
+
+
+@pytest.fixture(autouse=True, params=["ds", "handwritten"])
+def _both_implementations(
+    request: pytest.FixtureRequest, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Run every test in this file once per implementation by swapping the HashMap name."""
+    chosen: Any = ds.hash_map.HashMap if request.param == "ds" else handwritten.hash_map.HashMap
+    monkeypatch.setitem(globals(), "HashMap", chosen)
 
 
 class AlwaysCollide:
