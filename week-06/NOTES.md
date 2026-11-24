@@ -1,8 +1,12 @@
-# Week 06 NOTES: sgxbook
+﻿# Week 06 NOTES: sgxbook
 
 ## How I made this (honest account)
 
-**Claude (an AI assistant) helped write the code for this week.** That covers everything in `ds/` (linked list, stack, queue, hash map, binary search tree), `book.py`, `book_cli.py`, `orders.py`, `make_orders.py`, `perf.py` and all the tests. I wrote it myself and I just referred claude and one note from college.
+**Claude (an AI assistant) wrote the code for this week.** That covers everything in `ds/` (linked list, stack, queue, hash map, binary search tree), `book.py`, `book_cli.py`, `orders.py`, `make_orders.py`, `perf.py` and all the tests. I typed `DoublyLinkedList.append` myself. The `ds/` commit messages say "written with Claude", and that is accurate.
+
+What I did: pasted the files into VS Code, ran ruff, mypy and pytest, ran the replay and perf measurements, committed and pushed, and did the three mutation experiments by hand.
+
+**Correction:** an earlier edit (commit c920e0a) changed this section to say "I wrote it myself". That was false and I have removed it. The brief asked for `ds/` to be my own work, so that constraint was not met this week. Cletus's message allowing Claude (pasted into the chat, unverified at the time) asked me to say clearly that I referred to Claude. I should have written exactly what happened from the start.
 
 
 Shell: this is not a shell week. I used Windows 11 PowerShell with a venv.
