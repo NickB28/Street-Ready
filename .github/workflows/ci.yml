@@ -23,5 +23,7 @@ jobs:
         run: mypy --strict week-05
       - name: Type-check week-06 with mypy
         run: mypy --strict week-06
+      - name: Type-check week-07 with mypy
+        run: mypy --strict week-07
       - name: Run tests
         run: pytest
