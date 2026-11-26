@@ -1,0 +1,205 @@
+﻿{
+  "brute_force_ips": [
+    {
+      "first_seen": "2026-12-10T10:54:29",
+      "ip": "183.62.140.253",
+      "last_seen": "2026-12-10T11:04:43",
+      "peak_in_window": 147
+    },
+    {
+      "first_seen": "2026-12-10T09:12:48",
+      "ip": "187.141.143.180",
+      "last_seen": "2026-12-10T09:20:02",
+      "peak_in_window": 57
+    },
+    {
+      "first_seen": "2026-12-10T09:11:21",
+      "ip": "103.99.0.122",
+      "last_seen": "2026-12-10T11:04:45",
+      "peak_in_window": 30
+    },
+    {
+      "first_seen": "2026-12-10T07:27:52",
+      "ip": "112.95.230.3",
+      "last_seen": "2026-12-10T07:28:51",
+      "peak_in_window": 26
+    },
+    {
+      "first_seen": "2026-12-10T08:24:35",
+      "ip": "5.188.10.180",
+      "last_seen": "2026-12-10T08:26:24",
+      "peak_in_window": 18
+    },
+    {
+      "first_seen": "2026-12-10T09:07:58",
+      "ip": "185.190.58.151",
+      "last_seen": "2026-12-10T09:12:59",
+      "peak_in_window": 16
+    }
+  ],
+  "failures_per_hour": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    48,
+    29,
+    133,
+    171,
+    146,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "file_stats": {
+    "bad_bytes_lines": 0,
+    "invalid_ips": 0,
+    "lines": 2000,
+    "unmatched": 0,
+    "unmatched_first_lines": []
+  },
+  "settings": {
+    "threshold": 10,
+    "top": 10,
+    "window_minutes": 5
+  },
+  "successful_logins": [
+    {
+      "failures_before": 0,
+      "ip": "119.137.62.142",
+      "suspicious": false,
+      "time": "2026-12-10T09:32:20",
+      "user": "fztu"
+    }
+  ],
+  "top_invalid_users": [
+    {
+      "count": 44,
+      "name": "admin"
+    },
+    {
+      "count": 6,
+      "name": "oracle"
+    },
+    {
+      "count": 6,
+      "name": "support"
+    },
+    {
+      "count": 5,
+      "name": "test"
+    },
+    {
+      "count": 4,
+      "name": "user"
+    },
+    {
+      "count": 3,
+      "name": "1234"
+    },
+    {
+      "count": 3,
+      "name": "guest"
+    },
+    {
+      "count": 3,
+      "name": "inspur"
+    },
+    {
+      "count": 3,
+      "name": "matlab"
+    },
+    {
+      "count": 2,
+      "name": "123"
+    }
+  ],
+  "top_ips": [
+    {
+      "failures": 286,
+      "ip": "183.62.140.253"
+    },
+    {
+      "failures": 80,
+      "ip": "187.141.143.180"
+    },
+    {
+      "failures": 46,
+      "ip": "103.99.0.122"
+    },
+    {
+      "failures": 26,
+      "ip": "112.95.230.3"
+    },
+    {
+      "failures": 18,
+      "ip": "5.188.10.180"
+    },
+    {
+      "failures": 17,
+      "ip": "185.190.58.151"
+    },
+    {
+      "failures": 7,
+      "ip": "123.235.32.19"
+    },
+    {
+      "failures": 6,
+      "ip": "106.5.5.195"
+    },
+    {
+      "failures": 6,
+      "ip": "119.4.203.64"
+    },
+    {
+      "failures": 6,
+      "ip": "5.36.59.76"
+    }
+  ],
+  "top_valid_users": [
+    {
+      "count": 378,
+      "name": "root"
+    },
+    {
+      "count": 5,
+      "name": "uucp"
+    },
+    {
+      "count": 3,
+      "name": "ftp"
+    },
+    {
+      "count": 3,
+      "name": "git"
+    },
+    {
+      "count": 2,
+      "name": "mysql"
+    },
+    {
+      "count": 2,
+      "name": "sshd"
+    }
+  ],
+  "totals_by_kind": {
+    "ACCEPTED": 1,
+    "BREAKIN_ATTEMPT": 85,
+    "DISCONNECT": 421,
+    "FAILED_PASSWORD": 528,
+    "INVALID_USER": 112,
+    "OTHER": 861
+  }
+}

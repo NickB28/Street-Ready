@@ -1,0 +1,5 @@
+Failed password for (?:invalid user )?(?P<user>\S+) from (?P<ip>\S+) port (?P<port>\d+)
+^(?P<month>\w+)\s+(?P<day>\d+)\s+(?P<hour>\d{2}):(?P<minute>\d{2}):(?P<second>\d{2})\s+(?P<host>\S+)\s+(?P<process>\w+)\[(?P<pid>\d+)\]:\s+(?P<message>.*)$
+Accepted password for (?P<user>\S+) from (?P<ip>\S+) port (?P<port>\d+)
+Invalid user (?P<user>\S+) from (?P<ip>\S+)
+Received disconnect from (?P<ip>[^:]+):
