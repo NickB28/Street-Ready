@@ -112,3 +112,9 @@ def test_empty_input_gives_an_empty_report() -> None:
     report = run([])
     assert report["top_ips"] == []
     assert report["failures_per_hour"] == [0] * 24
+
+def test_repeated_line_counts_as_n_failures_inside_the_window() -> None:
+    report = run(["Dec 10 10:00:00 LabSZ sshd[1]: message repeated 5 times: "
+                  "[ Failed password for root from 1.2.3.4 port 22 ssh2]"], threshold=5)
+    assert report["brute_force_ips"][0]["ip"] == "1.2.3.4"
+    assert report["brute_force_ips"][0]["peak_in_window"] == 5
