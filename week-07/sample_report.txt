@@ -1,0 +1,68 @@
+﻿SSH ATTACK REPORT
+Lines read: 2000   unmatched: 0 (first: [])   lines with bad bytes: 0   invalid IPs: 0
+
+Events by kind:
+  FAILED_PASSWORD      528
+  INVALID_USER         112
+  ACCEPTED               1
+  DISCONNECT           421
+  BREAKIN_ATTEMPT       85
+  OTHER                861
+
+Top source IPs by failed attempts:
+  183.62.140.253                               286
+  187.141.143.180                               80
+  103.99.0.122                                  46
+  112.95.230.3                                  26
+  5.188.10.180                                  18
+
+Top usernames tried (existing users):
+  root                     378
+  uucp                       5
+  ftp                        3
+  git                        3
+  mysql                      2
+
+Top usernames tried (invalid users):
+  admin                     44
+  oracle                     6
+  support                    6
+  test                       5
+  user                       4
+
+Successful logins:
+  2026-12-10T09:32:20  fztu  119.137.62.142  (failures before: 0)
+
+Brute force: >= 10 failures within 5 min (edge inclusive):
+  183.62.140.253                           first 2026-12-10T10:54:29  last 2026-12-10T11:04:43  peak 147
+  187.141.143.180                          first 2026-12-10T09:12:48  last 2026-12-10T09:20:02  peak 57
+  103.99.0.122                             first 2026-12-10T09:11:21  last 2026-12-10T11:04:45  peak 30
+  112.95.230.3                             first 2026-12-10T07:27:52  last 2026-12-10T07:28:51  peak 26
+  5.188.10.180                             first 2026-12-10T08:24:35  last 2026-12-10T08:26:24  peak 18
+  185.190.58.151                           first 2026-12-10T09:07:58  last 2026-12-10T09:12:59  peak 16
+
+Failures per hour of day:
+  00:00  0
+  01:00  0
+  02:00  0
+  03:00  0
+  04:00  0
+  05:00  0
+  06:00  1
+  07:00  48
+  08:00  29
+  09:00  133
+  10:00  171
+  11:00  146
+  12:00  0
+  13:00  0
+  14:00  0
+  15:00  0
+  16:00  0
+  17:00  0
+  18:00  0
+  19:00  0
+  20:00  0
+  21:00  0
+  22:00  0
+  23:00  0
