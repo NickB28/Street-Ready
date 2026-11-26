@@ -33,7 +33,7 @@ I used Windows 11 PowerShell with a venv.
 ## Known limits (honest)
 
 - The disconnect regex `Received disconnect from (?P<ip>[^:]+):` does not handle IPv6 addresses, because IPv6 contains colons.
-- Only the 2,000-line sample was run. **I did not run the 655,146-line file**, so there are no PERF numbers (time, memory) yet. The code reads the file as a stream, so memory should be flat, but I have not measured it.
+- I ran the full 655k-line log and the 100k and 300k cuts (see PERF in the README). Memory was flat at about 20 MB. The first full run took 21.1 s (cold file read), and later runs took 3.7 s.
 - Commits only happened on Wed/Thu, so the rule of commits on three different days is not met for this week.
 - Week 06 required fix: part (a) is done (NOTES corrected). For part (b), the hand-written HashMap, the code was written by Claude and not by me. The file says so in its header. I did not add a prompts list to the week-06 NOTES.
 

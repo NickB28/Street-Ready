@@ -88,7 +88,17 @@ Brute force: >= 10 failures within 5 min (edge inclusive):
 
 ## PERF
 
-Not measured yet. I have only run the 2,000-line sample so far. See the update below if it gets filled in.
+Measured on Windows 11, Python in a venv, on the full Loghub OpenSSH log (655,146 lines, 73 MB), reading it as a stream. Time is wall-clock, and peak memory is the process's peak working set.
+
+| File | Time | Peak memory |
+|---|---|---|
+| first 100,000 lines | 0.8 s | 18.8 MB |
+| first 300,000 lines | 1.9 s | 20.1 MB |
+| all 655k lines | 3.7 s | 20.8 MB |
+
+Memory stays flat at about 20 MB, because only counters and a small window per IP are kept. The first full run I did took 21.1 s. That was the first read of the file, and my measuring script was polling the process. I did not repeat that cold-start run, so treat 3.7 s as the repeatable figure and 21 s as the worst case I saw. All 655,147 lines parsed with 0 unmatched.
+
+I measured with a small PowerShell script written with Claude's help (it samples `PeakWorkingSet64` every 50 ms), which is not part of the repo.
 
 ## Tests and checks
 
